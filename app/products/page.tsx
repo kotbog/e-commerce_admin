@@ -1,19 +1,6 @@
-import {FunctionComponent} from "react";
-
-export async function getServerSideProps() {
-    const res = await fetch("http://localhost:4000/product/", {
-        method: 'GET',
-        headers: {
-            "Content-Type": "application/json",
-        }
-    });
-    const products = await res.json();
-    return {
-        props: {
-            products
-        }
-    }
-}
+import ProductListItem from "@/app/products/ProductListItem";
+import Link from "next/link";
+import SearchInput from "@/app/components/SearchInput";
 
 type Product = {
     name: string,
@@ -21,14 +8,47 @@ type Product = {
     desc?: string,
     _id: string | number,
     price: number,
-    images?: Array<string>
+    images?: Array<string>,
+    created_at: Date
 }
 
-type ProductsProps = {
-    products: Array<Product>
+type GetProductsRes = {
+    products?: Array<Product>
 }
-const Products : FunctionComponent<ProductsProps> = ({products}) => {
-    return <div>{products ? products.map(item => item.name):"undefined"}</div>
+async function getProducts() : Promise<GetProductsRes> {
+    const res = await fetch("http://localhost:4000/product/", {
+        method: 'GET',
+        headers: {
+            "Content-Type": "application/json",
+        }
+    });
+    console.log('revalidate')
+    return await res.json();
+}
+
+
+
+const Products = async () => {
+
+    let data = await getProducts()
+    async function getProductsWithParams(name: string) {
+        data = await getProducts();
+    }
+
+    //return <div>{products ? products.map(item => item.name):"undefined"}</div>
+    return <div className={'py-4'}>
+        <SearchInput searchParams={getProductsWithParams}/>
+        <ul>
+        {
+            data.products?.map(item => <ProductListItem key={item._id} _id={item._id} name={item.name} price={item.price} img={item.images && item.images[0]}/>)
+        }
+        </ul>
+        <Link href={'/products/add'} className={'w-10 h-10 bg-blue-600 flex items-center justify-center rounded-full fixed bottom-10'}>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="white" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+        </Link>
+    </div>
 }
 
 export default Products;
