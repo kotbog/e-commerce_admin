@@ -37,7 +37,7 @@ const Products = async () => {
 
     //return <div>{products ? products.map(item => item.name):"undefined"}</div>
     return <div className={'py-4'}>
-        <SearchInput searchParams={getProductsWithParams}/>
+        <SearchInput />
         <ul>
         {
             data.products?.map(item => <ProductListItem key={item._id} _id={item._id} name={item.name} price={item.price} img={item.images && item.images[0]}/>)
