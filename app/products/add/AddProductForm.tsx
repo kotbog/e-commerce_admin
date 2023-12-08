@@ -6,6 +6,7 @@ import FileUpload from "@/app/components/FileUpload";
 import {Input} from "@/app/components/Input";
 import InputElementWithAddon from "@/app/components/InputElementWithAddon";
 import React, {FC, useState} from "react";
+import Banner from "@/app/components/Banner";
 
 type fileImgType = {
     fieldName: string,
@@ -30,6 +31,7 @@ const AddProductForm : FC<AddProductFormProps>  = () => {
         imgs: null as any | FileList,
         desc: ''
     })
+    const [banner, setBanner] = useState(false);
     function objToFormData(obj : objType) {
         const formData = new FormData();
 
@@ -37,7 +39,6 @@ const AddProductForm : FC<AddProductFormProps>  = () => {
             if(key==="imgs" && value) {
                 let i = 0;
                 Array.from(value as FileList).map(item => {
-                    alert(key + " " + value[i]);
                     formData.append(key, value[i] as string | Blob);
                     i++;
                 });
@@ -54,8 +55,9 @@ const AddProductForm : FC<AddProductFormProps>  = () => {
         const response = await fetch('http://localhost:4000/product/', {
             method: 'POST',
             body: FormData,
-        })
-        const data = await response.json()
+        });
+        setBanner(true);
+        return await response.json();
     }
     function handleChange ({value, name} : {value: string, name: string}) {
         setFormData({...formData, [name]: value });
@@ -65,11 +67,12 @@ const AddProductForm : FC<AddProductFormProps>  = () => {
     }
 
     return <form className={'flex py-4 justify-between'} onSubmit={handleSubmit}>
+        {banner ? <Banner value={`Товар ${formData.name} був`} linkValue={'доданий'} linkTo={'/products'} handleClose={() => {setBanner(false)} }/> : null}
         <div className={'basis-1/3'}>
             <Input inputSizing={'md'} labelValue={'Назва товару'} name={'name'} handleChange={handleChange}/>
             <Input inputSizing={'md'} labelValue={'Артикул'} name={'SKU'} handleChange={handleChange}/>
             <InputElementWithAddon addon={"₴"} placeholder={'Наприклад: 100.0, 5300'} label={"Ціна"} name={"price"} handleChange={handleChange}/>
-            <button type={'submit'}>send</button>
+            <Button color={'primary'} type={'submit'} value={'Зберегти'}/>
         </div>
         <div className={'basis-1/2'}>
             <FileUpload name={"imgs"} handleChange={handleFileEvent}/>

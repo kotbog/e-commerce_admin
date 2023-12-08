@@ -16,9 +16,9 @@ type GetProductsRes = {
     products?: Array<Product>
 }
 async function getProducts() : Promise<GetProductsRes> {
-    console.log(process.env.API_URL)
     const res = await fetch(`${process.env.API_URL}product`, {
         method: 'GET',
+        next: {revalidate: 5},
         headers: {
             "Content-Type": "application/json",
         }

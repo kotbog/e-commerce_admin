@@ -1,6 +1,8 @@
 "use client"
 import {FC} from "react";
-import {redirect} from "next/navigation";
+import {useRouter} from "next/navigation";
+
+
 
 type ProductsPageProps = {
     params: {
@@ -9,14 +11,13 @@ type ProductsPageProps = {
 }
 
 const ProductsPage : FC<ProductsPageProps> = ({params}) => {
-
+    const router = useRouter();
     async function handleClick () {
-        await fetch(`${process.env.API_URL}product/${params.itemId}`, {
+        await fetch(`http://localhost:4000/product/${params.itemId}`, {
             method: 'DELETE'
         })
-            .then(() => redirect('/products'))
-            .catch((e) => console.error(e))
-
+            .then(() => router.push('/products'))
+            .catch((e) => {console.error(e)});
     }
 
     return <div>
