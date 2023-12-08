@@ -16,7 +16,8 @@ type GetProductsRes = {
     products?: Array<Product>
 }
 async function getProducts() : Promise<GetProductsRes> {
-    const res = await fetch("http://localhost:4000/product/", {
+    console.log(process.env.API_URL)
+    const res = await fetch(`${process.env.API_URL}product`, {
         method: 'GET',
         headers: {
             "Content-Type": "application/json",
@@ -30,10 +31,7 @@ async function getProducts() : Promise<GetProductsRes> {
 
 const Products = async () => {
 
-    let data = await getProducts()
-    async function getProductsWithParams(name: string) {
-        data = await getProducts();
-    }
+    let data = await getProducts();
 
     //return <div>{products ? products.map(item => item.name):"undefined"}</div>
     return <div className={'py-4'}>

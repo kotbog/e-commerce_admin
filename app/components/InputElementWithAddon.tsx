@@ -5,16 +5,23 @@ import { Label, TextInput } from 'flowbite-react';
 type InputElementWithAddonProps = {
     addon: string,
     placeholder: string,
-    label?: string
+    label?: string,
+    name: string,
+    handleChange: ({value, name} : {value: string, name: string}) => void
 }
 
-export default function InputElementWithAddon({addon, placeholder, label}:InputElementWithAddonProps) {
+export default function InputElementWithAddon({addon, placeholder, label, name, handleChange}:InputElementWithAddonProps) {
+    function onTextInputChange(e : React.ChangeEvent<HTMLInputElement>) {
+        const value = e.currentTarget.value;
+        handleChange({value, name});
+    }
+
     return (
         <div className="max-w-md">
             {label ?
                 <div className="mb-2 block">
                     <Label
-                        htmlFor="input"
+                        htmlFor={name}
                         value={label}
                     />
                 </div>
@@ -23,9 +30,10 @@ export default function InputElementWithAddon({addon, placeholder, label}:InputE
 
             <TextInput
                 addon={addon}
-                id="input"
+                id={name}
                 placeholder={placeholder}
                 required
+                onChange={onTextInputChange}
             />
         </div>
     )
