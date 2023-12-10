@@ -7,10 +7,11 @@ type InputElementWithAddonProps = {
     placeholder: string,
     label?: string,
     name: string,
+    value?:string,
     handleChange: ({value, name} : {value: string, name: string}) => void
 }
 
-export default function InputElementWithAddon({addon, placeholder, label, name, handleChange}:InputElementWithAddonProps) {
+export default function InputElementWithAddon({addon, placeholder, label, name, handleChange, value}:InputElementWithAddonProps) {
     function onTextInputChange(e : React.ChangeEvent<HTMLInputElement>) {
         const value = e.currentTarget.value;
         handleChange({value, name});
@@ -34,6 +35,7 @@ export default function InputElementWithAddon({addon, placeholder, label, name, 
                 placeholder={placeholder}
                 required
                 onChange={onTextInputChange}
+                value={value}
             />
         </div>
     )

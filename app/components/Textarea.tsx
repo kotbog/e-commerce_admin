@@ -4,10 +4,11 @@ import {FC, MutableRefObject} from "react";
 
 type TextareaElementProps = {
     name: string,
+    value?: string,
     handleChange: ({value, name} : {value: string, name: string}) => void
 }
 
-const TextareaElement : FC<TextareaElementProps> = ({name, handleChange}) => {
+const TextareaElement : FC<TextareaElementProps> = ({name, handleChange, value}) => {
     function onTextareaChange(e : React.ChangeEvent<HTMLTextAreaElement>) {
         const value = e.target.value;
         handleChange({name, value});
@@ -30,6 +31,7 @@ const TextareaElement : FC<TextareaElementProps> = ({name, handleChange}) => {
             rows={4}
             className={'p-3 w-full'}
             onChange={onTextareaChange}
+            value={value}
         />
     </div>
 }
