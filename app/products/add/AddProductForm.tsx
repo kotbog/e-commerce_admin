@@ -7,6 +7,7 @@ import {Input} from "@/app/components/Input";
 import InputElementWithAddon from "@/app/components/InputElementWithAddon";
 import React, {FC, useState} from "react";
 import Banner from "@/app/components/Banner";
+import {objToFormData} from "@/app/utils/ObjToFormData";
 
 type fileImgType = {
     fieldName: string,
@@ -32,23 +33,6 @@ const AddProductForm : FC<AddProductFormProps>  = () => {
         desc: ''
     })
     const [banner, setBanner] = useState(false);
-    function objToFormData(obj : objType) {
-        const formData = new FormData();
-
-        Object.entries(obj).forEach(([key, value]) => {
-            if(key==="imgs" && value) {
-                let i = 0;
-                Array.from(value as FileList).map(item => {
-                    formData.append(key, value[i] as string | Blob);
-                    i++;
-                });
-            } else {
-                formData.append(key, value as string);
-            }
-        });
-
-        return formData;
-    }
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         const FormData = objToFormData(formData);

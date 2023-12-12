@@ -2,37 +2,16 @@
 import React, {FC, useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import ProductEditor from "@/app/products/[itemId]/ProductEditor";
-import useSWR from "swr";
+import {Product} from "@/app/types";
 
 
-type Product = {
-    name: string,
-    SKU: number | string,
-    desc?: string,
-    _id: string | number,
-    price: number,
-    images?: Array<string>,
-    created_at: Date
-}
+
 
 type ProductsPageProps = {
     params: {
         itemId: string
     }
 }
-
-const fetchDataByID = (path : string) => {
-    console.log('fetch')
-    return fetch(path, {
-        method: 'GET',
-        headers: {
-            "Content-Type": "application/json",
-        }
-    }).then((res) => {
-        return res.json();
-    }).catch(e => {console.error(e)});
-}
-
 
 const ProductsPage : FC<ProductsPageProps> = ({params}) => {
     const [productData, setProductData] = useState<Product | null>(null);
@@ -46,6 +25,7 @@ const ProductsPage : FC<ProductsPageProps> = ({params}) => {
         }).then(async (res) => {
             setProductData(await res.json());
         }).catch(e => {console.error(e)});
+
     }, [params.itemId]);
 
     async function handleClickDelete () {
@@ -58,7 +38,7 @@ const ProductsPage : FC<ProductsPageProps> = ({params}) => {
     return <div>
         {params.itemId}
         {productData ?
-            <ProductEditor name={productData.name} article={productData.SKU as string} price={productData.price} desc={productData.desc} images={productData.images}/>
+            <ProductEditor id={params.itemId} name={productData.name} article={productData.SKU as string} price={productData.price} desc={productData.desc} imgs={productData.images}/>
             : <div>Loading...</div>
         }
         <button className={'p-3'} onClick={handleClickDelete}>
