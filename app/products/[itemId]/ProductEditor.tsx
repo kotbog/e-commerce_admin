@@ -11,6 +11,7 @@ import {objToFormData} from "@/app/utils/ObjToFormData";
 import {Dropdown} from "flowbite-react";
 import {allowedDisplayValues} from "next/dist/compiled/@next/font/dist/constants";
 import {Category} from "@/app/types";
+import ModalWindow from "@/app/products/ModalWindow";
 
 
 type ProductEditorProps = {
@@ -43,7 +44,7 @@ const ProductEditor : FC<ProductEditorProps> = ({id, name, article, price, desc,
     });
     const [updates, setUpdates] = useState<ProductUpdatesType>();
     const [categories, setCategories] = useState<Array<Category>>()
-
+    const [modal, setModal] = useState(false);
 
     useEffect(()=>{
         setFormData({
@@ -90,6 +91,7 @@ const ProductEditor : FC<ProductEditorProps> = ({id, name, article, price, desc,
 
     return <form className={'flex py-4 justify-between'} onSubmit={handleSubmit}>
         {banner ? <Banner value={`Товар ${formData.name} був змінений`} handleClose={() => {setBanner(false)} }/> : null}
+        <ModalWindow showModal={modal} onCloseModal={() => {setModal(false)}}/>
         <div className={'basis-1/3'}>
             <Input value={formData.name} inputSizing={'md'} labelValue={'Назва товару'} name={'name'} handleChange={handleChange}/>
             <Input value={formData.SKU} inputSizing={'md'} labelValue={'Артикул'} name={'SKU'} handleChange={handleChange}/>
@@ -99,7 +101,7 @@ const ProductEditor : FC<ProductEditorProps> = ({id, name, article, price, desc,
                     {
                         categories?.map(item =>  <Dropdown.Item className={'flex justify-between'} key={item._id}>{item.name}</Dropdown.Item>)
                     }
-                    <Dropdown.Item className={'flex justify-between'}>Додати категорію <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                    <Dropdown.Item className={'flex justify-between'} onClick={() => {setModal(true)}}>Додати категорію<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     </Dropdown.Item>

@@ -8,6 +8,7 @@ import InputElementWithAddon from "@/app/components/InputElementWithAddon";
 import React, {FC, useState} from "react";
 import Banner from "@/app/components/Banner";
 import {objToFormData} from "@/app/utils/ObjToFormData";
+import ModalWindow from "@/app/products/ModalWindow";
 
 type fileImgType = {
     fieldName: string,
@@ -33,6 +34,8 @@ const AddProductForm : FC<AddProductFormProps>  = () => {
         desc: ''
     })
     const [banner, setBanner] = useState(false);
+    const [modal, setModal] = useState(false);
+
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         const FormData = objToFormData(formData);
@@ -52,6 +55,7 @@ const AddProductForm : FC<AddProductFormProps>  = () => {
 
     return <form className={'flex py-4 justify-between'} onSubmit={handleSubmit}>
         {banner ? <Banner value={`Товар ${formData.name} був`} linkValue={'доданий'} linkTo={'/products'} handleClose={() => {setBanner(false)} }/> : null}
+
         <div className={'basis-1/3'}>
             <Input inputSizing={'md'} labelValue={'Назва товару'} name={'name'} handleChange={handleChange}/>
             <Input inputSizing={'md'} labelValue={'Артикул'} name={'SKU'} handleChange={handleChange}/>
@@ -60,7 +64,7 @@ const AddProductForm : FC<AddProductFormProps>  = () => {
         </div>
         <div className={'basis-1/2'}>
             <FileUpload name={"imgs"} handleChange={handleFileEvent}/>
-            <TextareaElement name={'desc'} handleChange={handleChange}/>
+            <TextareaElement name={'desc'} handleChange={handleChange} value={formData.desc}/>
         </div>
     </form>
 }

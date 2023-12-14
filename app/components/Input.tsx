@@ -7,10 +7,11 @@ type InputProps = {
     inputSizing: "sm" | "md" | "lg",
     name: string,
     value?: string,
+    placeholder?: string,
     handleChange: ({value, name} : {value: string, name: string}) => void
 }
 
-export function Input ({labelValue, inputSizing, name, handleChange, value}:InputProps)  {
+export function Input ({labelValue, inputSizing, name, handleChange, value, placeholder}:InputProps)  {
 
     function onHandleInputChange(e : React.ChangeEvent<HTMLInputElement>) {
         const value = e.currentTarget.value;
@@ -30,6 +31,7 @@ export function Input ({labelValue, inputSizing, name, handleChange, value}:Inpu
             type="text"
             onChange={onHandleInputChange}
             value={value}
+            placeholder={placeholder}
         />
     </div>
 }
