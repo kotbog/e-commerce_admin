@@ -1,13 +1,32 @@
 "use client"
 
 import Link from "next/link";
+import {Button} from "flowbite-react";
+import {useRouter} from "next/navigation";
+import {signOut, useSession} from "next-auth/react";
 
 export default function Header() {
+    const router = useRouter();
+    const {data: session} = useSession();
+    if(session) {
+        console.log(session)
+    }
+    async function logOut () {
+       fetch('http://localhost:4000/refresh', {
+            method: "delete"
+       }).then(() => {
+           if (typeof window !== 'undefined') {
+               localStorage.removeItem('accessToken');
+           }
+           router.push('/login');
+       });
+    }
+
     return (
 
         <nav className="bg-white border-gray-200 dark:bg-gray-900">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-                <Link href="https://flowbite.com/" className="flex items-center">
+                <Link href="/" className="flex items-center">
                     <img src="https://flowbite.com/docs/images/logo.svg" className="h-8 mr-3" alt="Flowbite Logo" />
                     <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Flowbite</span>
                 </Link>
@@ -42,6 +61,8 @@ export default function Header() {
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
                         </svg>
                     </button>
+                    {session?.user ?  <Button onClick={() => signOut({callbackUrl: '/auth/login'})}>Log Out</Button> : null}
+
                 </div>
                 <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-user">
                     <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">

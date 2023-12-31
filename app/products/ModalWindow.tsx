@@ -1,9 +1,9 @@
 'use client'
 import {Modal} from "flowbite-react";
 import {FC, useState} from "react";
-import Button from "@/app/components/Button";
-import {Input} from "@/app/components/Input";
-import Textarea from "@/app/components/Textarea";
+import Button from "@/components/Button";
+import {Input} from "@/components/Input";
+import Textarea from "@/components/Textarea";
 
 
 type ModalWindowType = {

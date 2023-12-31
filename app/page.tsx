@@ -1,9 +1,11 @@
-import Image from 'next/image'
 import Link from "next/link";
 
-export default function Home() {
-  return <div>
-    <h1>Home</h1>
-    <Link href={'/dashboard'}>To about</Link>
+
+function Home() {
+  return <div className={'flex flex-col'}>
+    <Link href={'/auth/login'}>Log In</Link>
+    <Link href={'/auth/signup'}>Sign Up</Link>
+
   </div>
 }
+export default Home;

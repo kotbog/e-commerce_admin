@@ -7,18 +7,19 @@ type InputProps = {
     inputSizing: "sm" | "md" | "lg",
     name: string,
     value?: string,
+    type?: string,
     placeholder?: string,
-    handleChange: ({value, name} : {value: string, name: string}) => void
+    handleChange?: ({value, name} : {value: string, name: string}) => void
 }
 
-export function Input ({labelValue, inputSizing, name, handleChange, value, placeholder}:InputProps)  {
+export function Input ({labelValue, inputSizing, name, handleChange, type, value, placeholder}:InputProps)  {
 
     function onHandleInputChange(e : React.ChangeEvent<HTMLInputElement>) {
         const value = e.currentTarget.value;
-        handleChange({value, name});
+        handleChange && handleChange({value, name});
     }
 
-    return <div>
+    return <>
         {labelValue ? <div className="mb-2 block">
             <Label
                 htmlFor={name}
@@ -28,10 +29,10 @@ export function Input ({labelValue, inputSizing, name, handleChange, value, plac
         <TextInput
             id={name}
             sizing={inputSizing}
-            type="text"
+            type={type ? type : 'text'}
             onChange={onHandleInputChange}
             value={value}
             placeholder={placeholder}
         />
-    </div>
+    </>
 }
