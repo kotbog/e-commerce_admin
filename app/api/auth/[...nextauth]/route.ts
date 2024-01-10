@@ -4,9 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 
 export const authOptions: AuthOptions = {
-    pages: {
-        signIn: "/auth/login"
-    },
+
     providers: [
         CredentialsProvider({
             name: "Credentials",
@@ -35,28 +33,22 @@ export const authOptions: AuthOptions = {
                     }
                 });
                 const data = await res.json();
-                if(data.token) {
-                    console.log(data)
-                    return data;
-                } else {
-                    return null;
+                console.log(data);
+                if(data.status === 200 && data.user) {
+                    return data.user;
+                }else {
+                    return null
                 }
 
             }
         })
     ],
-    secret: process.env.AUTH_SECRET,
-    session: {
-        strategy: "jwt" as SessionStrategy,
+    pages: {
+        signIn: "/auth/login"
     },
-    callbacks: {
-        async jwt({token, user}) {
-            return {...token, ...user};
-        },
-        async session({session, user,token}){
-            session.user = token as any;
-            return session;
-        }
+    secret: process.env.NEXTAUTH_SECRET,
+    session: {
+        strategy: "jwt"
     }
 }
 

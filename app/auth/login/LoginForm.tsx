@@ -7,12 +7,10 @@ import {Button, Label, TextInput} from "flowbite-react";
 import {toast, Toaster} from "react-hot-toast";
 import {signIn} from "next-auth/react";
 import {AiOutlineLoading} from "react-icons/ai";
-import {useForm} from "react-hook-form";
+import {SubmitHandler, useForm} from "react-hook-form";
 import {
     LogInSchema,
-    SignUpSchema,
-    validationLoginSchemaType,
-    validationSchemaType
+    validationLoginSchemaType, validationSchemaType,
 } from "@/utils/validators/form_validator";
 import {zodResolver} from "@hookform/resolvers/zod";
 
@@ -34,23 +32,22 @@ const LoginForm : FC<LoginFormProps> = () => {
     const {register, handleSubmit, formState: {errors}} = useForm<validationLoginSchemaType>({
         resolver: zodResolver(LogInSchema)
     });
-    async function handleLoginAction(formData : FormData) {
+    const onSubmit: SubmitHandler<validationLoginSchemaType> = async (data) => {
         try {
             setLoading(true);
             const res = await signIn("credentials", {
                 redirect: false,
-                email: formData.get('email'),
-                password: formData.get('password'),
+                email: data.email,
+                password: data.password,
                 callbackUrl: '/'
             });
-            setLoading(false);
-            console.log(res);
             if (!res?.error) {
                 router.push('/');
             } else {
                 setError('Invalid email or password');
                 showToast();
             }
+            setLoading(false);
         }catch (e) {
             setError(e as string);
             showToast();
@@ -58,7 +55,7 @@ const LoginForm : FC<LoginFormProps> = () => {
     }
 
 
-    return <form action={handleLoginAction}>
+    return <form onSubmit={handleSubmit(onSubmit)}>
         <Label htmlFor={'email'}>E-mail</Label>
         <TextInput
             placeholder={"Ваш e-mail..."}

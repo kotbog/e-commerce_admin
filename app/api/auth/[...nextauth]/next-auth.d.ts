@@ -10,8 +10,4 @@ declare module 'next-auth' {
         created_at: Date;
         role: 'User' | 'Admin' | 'SuperAdmin';
     }
-    interface Session {
-        token: string,
-        user: User
-    }
 }
