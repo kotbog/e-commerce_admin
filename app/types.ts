@@ -34,6 +34,7 @@ export type Order = {
     order: {
         _id: string,
         user: User,
+        status: string,
         total: number | string
     }
     quantity: number | string,

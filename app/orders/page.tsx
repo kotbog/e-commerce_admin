@@ -1,5 +1,5 @@
 import {Table} from "flowbite-react";
-import ProductTable from "@/app/orders/ProductTable";
+import OrdersTable from "@/app/orders/OrdersTable";
 import {Order} from "@/app/types";
 
 type getOrdersResponse = {
@@ -17,6 +17,6 @@ export default async function Orders () {
     const response = await getOrders();
     return <div>
         <h1 className={'font-bold text-xl mb-5'}>Замовлення</h1>
-        <ProductTable orders={response.orders}/>
+        <OrdersTable orders={response.orders}/>
     </div>
 }
