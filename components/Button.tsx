@@ -9,7 +9,7 @@ type ButtonProps = React.ComponentProps<"button"> & {
 }
 
 const Button : FC<ButtonProps> = ({ value,...props}) => {
-    return <button className={"bg-blue-600 py-2 px-5 rounded-full my-4"} {...props}>{value}</button>
+    return <button className={"bg-blue-600 text-white py-2 px-5 rounded-full my-4"} {...props}>{value}</button>
 }
 
 export default Button;

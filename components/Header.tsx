@@ -4,7 +4,8 @@ import Link from "next/link";
 import {Button} from "flowbite-react";
 import {useRouter} from "next/navigation";
 import {signOut, useSession} from "next-auth/react";
-
+import preview from "@/app/assets/img.png"
+import Image from "next/image";
 export default function Header() {
     const router = useRouter();
     const {data: session} = useSession();
@@ -33,7 +34,7 @@ export default function Header() {
                 <div className="flex items-center md:order-2">
                     <button type="button" className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
                         <span className="sr-only">Open user menu</span>
-                        <img className="w-8 h-8 rounded-full" src="" alt="user photo"/>
+                        <Image className="w-8 h-8 rounded-full" src={preview} alt="user photo"/>
                     </button>
                     <div className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600" id="user-dropdown">
                         <div className="px-4 py-3">

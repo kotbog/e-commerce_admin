@@ -13,6 +13,7 @@ import {Category} from "@/app/types";
 import ModalWindow from "@/app/products/ModalWindow";
 import {revalidatePath, revalidateTag} from "next/cache";
 import {useRouter} from "next/navigation";
+import {Promise} from "mongoose";
 
 
 type ProductEditorProps = {
@@ -64,18 +65,28 @@ const ProductEditor : FC<ProductEditorProps> = ({
             desc: desc ? desc : '',
             category: category || ''
         });
-        getCategories().then((res) => {setCategories(res)});
+        getCategories().then((res) => {
+            console.log("res" + res);
+            if(res && !res.error) {
+                setCategories(res.categories)
+            }
+
+        });
 
     }, [article, category, desc, imgs, name, price]);
 
-    async function getCategories()  {
+    type getCategoriesResponse = {
+        error: boolean,
+        categories: {} & Array<Category>
+    }
+    const getCategories = async  () : Promise<getCategoriesResponse | undefined> =>  {
         try {
             const res = await fetch(`http://localhost:4000/category`, {
                 method: 'get',
                 headers: {
                     "Content-Type": "application/json",
                 }
-            })
+            });
             return await res.json();
         }catch (e) {
             console.error(e);
@@ -96,12 +107,15 @@ const ProductEditor : FC<ProductEditorProps> = ({
         e.preventDefault();
         if(formData) {
             const FormData = objToFormData(formData);
-           fetch(`http://localhost:4000/product/${update && id}`,
+           fetch(`http://localhost:4000/product${update ? id : '/'}`,
                 {
                     method: update ? "PUT" : "POST",
-                    body: FormData
+                    body: FormData,
+                    cache:'no-cache'
                 }).then((res) => {
                     setBanner(true);
+                    alert(res)
+               console.log(res)
                     return res;
            }).catch((e) => {alert(e)})
         }
@@ -112,7 +126,7 @@ const ProductEditor : FC<ProductEditorProps> = ({
             method: "DELETE"
         })
             .then(res => {
-                router.push('/products/add')
+                router.push('/products/add');
                 return res.json();
             })
             .catch(e => {console.error(e)})
@@ -129,7 +143,7 @@ const ProductEditor : FC<ProductEditorProps> = ({
             <div className={'py-3'}>
                 <Dropdown label={formData.category ? formData.category : 'Вибір категорії'} placement="right-start">
                     {
-                        categories?.map(item =>  <Dropdown.Item className={'flex justify-between'} key={item._id} onClick={() => {handleCategorySelect(item.name)}}>{item.name}</Dropdown.Item>)
+                        categories && categories[0]? categories.map(item =>  <Dropdown.Item className={'flex justify-between'} key={item._id} onClick={() => {handleCategorySelect(item.name)}}>{item.name}</Dropdown.Item>) : null
                     }
                     <Dropdown.Item className={'flex justify-between'} onClick={() => {setModal(true)}}>Додати категорію<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -138,7 +152,7 @@ const ProductEditor : FC<ProductEditorProps> = ({
                 </Dropdown>
             </div>
             <div className={'flex justify-between'}>
-                <Button color={'primary'} type={'submit'} value={'Зберегти'}/>
+                <Button color={'primary'} type={'submit'} value={'Зберегти'} />
                 {
                     update && <button className={'p-3'} onClick={handleDelete}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -158,7 +172,7 @@ const ProductEditor : FC<ProductEditorProps> = ({
                 (Array.isArray(formData.imgs) && formData.imgs.every(item => typeof item === 'string'))
                 && formData.imgs.map(img => {
                     return <div className={'w-20'} key={name}>
-                        <Image src={img ? img : ""} alt={`${name}-img`} width={50} height={100} className={'object-contain'}/>
+                        <Image src={img ? img : null} alt={`${name}-img`} width={50} height={100} className={'object-contain'}/>
                     </div>
                 })
             }

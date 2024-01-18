@@ -1,7 +1,7 @@
 import ProductListItem from "@/app/products/ProductListItem";
 import Link from "next/link";
 import SearchInput from "@/components/SearchInput";
-import {useSession} from "next-auth/react";
+
 
 
 type Product = {

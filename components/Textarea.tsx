@@ -29,7 +29,7 @@ const TextareaElement : FC<TextareaElementProps> = ({name, handleChange, value})
             placeholder="Залиште опис..."
             required
             rows={4}
-            className={'p-3 w-full'}
+            className={'p-3 w-full h-52'}
             onChange={onTextareaChange}
             value={value}
         />
