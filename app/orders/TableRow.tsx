@@ -7,7 +7,7 @@ import {ChangeEvent, FC} from "react";
 
 type TableRowProps = {
     id: string,
-    date: Date,
+    date: string,
     total: string,
     status: string,
     user: Partial<User>,
@@ -19,7 +19,7 @@ const TableRow: FC<TableRowProps> = ({id, date, total, user, status, onChangeSta
         className={`bg-white dark:border-gray-700 dark:bg-gray-800 ${status == 'Done' || status == 'Failed' ? 'bg-gray-100' : ''}`}>
         <Table.Cell>{id}</Table.Cell>
         <Table.Cell>${total}</Table.Cell>
-        <Table.Cell>{date}</Table.Cell>
+        <Table.Cell>{new Date(date).toLocaleString()}</Table.Cell>
         <Table.Cell>
             <p>+{user.telephone}</p>
             <p>{user.email}</p>

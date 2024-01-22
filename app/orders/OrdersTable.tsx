@@ -2,39 +2,42 @@
 
 import {Select, Table} from "flowbite-react";
 import {ChangeEvent, FC, useEffect, useState} from "react";
-import {Order} from "@/app/types";
+import {Order, OrderDetails} from "@/app/types";
 import Link from "next/link";
 import TableRow from "@/app/orders/TableRow";
 import {findAllInRenderedTree} from "react-dom/test-utils";
 import {element} from "prop-types";
 
 type ProductTableProps = {
-    orders: Array<Order>
+    orders: Array<OrderDetails>,
+    update: ({id, status} : {id: string, status: string}) => Promise<{ error: boolean }>
 }
 
-const OrdersTable : FC<ProductTableProps> = ({orders}) => {
-    const [ordersList, setOrdersList] = useState<Array<Order>>();
+const OrdersTable : FC<ProductTableProps> = ({orders, update}) => {
+    const [ordersList, setOrdersList] = useState<Array<OrderDetails>>();
     
     useEffect(() => {
         setOrdersList(orders.sort((a, b) =>  {
-            return a.order.status == 'Processing' ? -1 : b.order.status == 'Processing' ? 1 : 0;
+            return a.status == 'Processing' ? -1 : b.status == 'Processing' ? 1 : 0;
         }))
     }, [orders]);
 
 
-    function handleStatusChange(event: ChangeEvent<HTMLSelectElement>, id: string) {
+    async function handleStatusChange(event: ChangeEvent<HTMLSelectElement>, id: string) {
         const option = event.target.value;
-        let tempOrders : Array<Order> = [...ordersList];
+        // let tempOrders : Array<OrderDetails> = ordersList ? [...ordersList] : [];
+        const res = await update({id: id, status: option});
+        if(res.error) console.log('error')
+      // const res = ordersList?.forEach(async (element, index) => {
+      //       if(element._id === id) {
+      //           tempOrders.splice(index, 1);
+      //           element.status = option;
+      //           if(option == 'Processing') tempOrders.unshift(element);
+      //           else tempOrders.push(element);
+      //           return await update({id: element._id, status: option});
+      //       }
+      //   })
 
-        ordersList?.forEach((element, index) => {
-            if(element._id === id) {
-                tempOrders.splice(index, 1);
-                element.order.status = option;
-                if(option == 'Processing') tempOrders.unshift(element);
-                else tempOrders.push(element);
-            }
-        })
-        setOrdersList(tempOrders);
     }
 
     return <Table>
@@ -51,7 +54,7 @@ const OrdersTable : FC<ProductTableProps> = ({orders}) => {
         <Table.Body className="divide-y">
             {
                 ordersList?.map(item => {
-                    return <TableRow onChangeStatus={handleStatusChange} key={item._id} id={item._id} status={item.order.status} user={item.order.user} date={item.created_at} total={item.order.total}/>
+                    return <TableRow onChangeStatus={handleStatusChange} key={item._id} id={item._id} status={item.status} user={item.user} date={item.created_at} total={item.total}/>
                 })
             }
         </Table.Body>

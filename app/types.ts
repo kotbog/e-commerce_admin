@@ -31,13 +31,15 @@ export type User = {
 export type Order = {
     _id: string
     product: Product,
-    order: {
-        _id: string,
-        user: User,
-        status: string,
-        total: number | string
-    }
+    order: OrderDetails
     quantity: number | string,
     created_at: Date
+}
+export type OrderDetails = {
+    _id: string,
+    user: User,
+    status: string,
+    total: string
+    created_at: string
 }
 
