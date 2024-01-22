@@ -25,19 +25,8 @@ const OrdersTable : FC<ProductTableProps> = ({orders, update}) => {
 
     async function handleStatusChange(event: ChangeEvent<HTMLSelectElement>, id: string) {
         const option = event.target.value;
-        // let tempOrders : Array<OrderDetails> = ordersList ? [...ordersList] : [];
         const res = await update({id: id, status: option});
-        if(res.error) console.log('error')
-      // const res = ordersList?.forEach(async (element, index) => {
-      //       if(element._id === id) {
-      //           tempOrders.splice(index, 1);
-      //           element.status = option;
-      //           if(option == 'Processing') tempOrders.unshift(element);
-      //           else tempOrders.push(element);
-      //           return await update({id: element._id, status: option});
-      //       }
-      //   })
-
+        if(res.error) console.log('error');
     }
 
     return <Table>

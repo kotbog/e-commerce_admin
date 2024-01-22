@@ -107,17 +107,16 @@ const ProductEditor : FC<ProductEditorProps> = ({
         e.preventDefault();
         if(formData) {
             const FormData = objToFormData(formData);
-           fetch(`http://localhost:4000/product${update ? id : '/'}`,
+           fetch(`http://localhost:4000/product/${update ? id : ''}`,
                 {
                     method: update ? "PUT" : "POST",
                     body: FormData,
                     cache:'no-cache'
                 }).then((res) => {
                     setBanner(true);
-                    alert(res)
-               console.log(res)
                     return res;
-           }).catch((e) => {alert(e)})
+           }).catch((e) => {
+               console.error(e)})
         }
     }
 

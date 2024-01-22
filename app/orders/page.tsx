@@ -1,15 +1,12 @@
-import {Table} from "flowbite-react";
 import OrdersTable from "@/app/orders/OrdersTable";
-import {Order, OrderDetails} from "@/app/types";
+import {OrderDetails} from "@/app/types";
 import {revalidateTag} from "next/cache";
-import {log} from "node:util";
 
 type getOrdersResponse = {
     orders: Array<OrderDetails>,
     error: boolean
 }
 async function getOrders () : Promise<getOrdersResponse> {
-    console.log('revalidate')
     const res = await fetch('http://localhost:4000/order', {
         method: 'GET',
         next: {

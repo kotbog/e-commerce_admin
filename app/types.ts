@@ -28,13 +28,15 @@ export type User = {
     address: string,
     role?: string
 }
-export type Order = {
+export type OrderItem = {
     _id: string
     product: Product,
     order: OrderDetails
     quantity: number | string,
     created_at: Date
 }
+export type OrderItems  = {order: Array<OrderItem>}
+
 export type OrderDetails = {
     _id: string,
     user: User,

@@ -32,7 +32,7 @@ const TableRow: FC<TableRowProps> = ({id, date, total, user, status, onChangeSta
                 <option value={'Failed'}>Failed</option>
             </Select>
         </Table.Cell>
-        <Table.Cell><Link href={'/order/' + id}
+        <Table.Cell><Link href={'/orders/' + id}
                           className={'font-medium text-cyan-600 hover:underline dark:text-cyan-500'}>More...</Link></Table.Cell>
     </Table.Row>
 }
